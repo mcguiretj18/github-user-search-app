@@ -4,15 +4,16 @@ import './App.css';
 import { useLocalStorage } from './hooks/useLocalStorage'
 import { Moon, Sun } from './icons'
 import { Button } from './components'
+import * as colors from './styles/colors'
 
 const theme = {
   light: {
-    background: '#F6F8FF',
-    foreground: '#222731'
+    background: colors.bgLight,
+    foreground: colors.textLight700
   },
   dark: {
-    background: '#141D2F',
-    foreground: '#90A4D4'
+    background: colors.bgDark,
+    foreground: colors.textDark700
   }
 }
 

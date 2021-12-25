@@ -8,6 +8,7 @@ import { Header, SearchResults, ThemeButton } from './components'
 import * as colors from './styles/colors'
 import { client } from './utils/api-client'
 import { theme, initialMode } from './theme'
+import { Search } from './icons';
 
 declare module '@emotion/react' {
   interface Theme {
@@ -30,6 +31,9 @@ const StyledSearch = styled.section(
     padding: '10px',
     marginBottom: '1rem',
     borderRadius: '15px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     '& form': {
       display: 'flex',
       justifyContent: 'space-between'
@@ -38,7 +42,9 @@ const StyledSearch = styled.section(
       border: 'none',
       fontSize: '13px',
       fontFamily: 'Space Mono, monospace',
-      margin: '18px 0px'
+      padding: '12px 0px',
+      margin: '6px 0px',
+      paddingRight: '8px'
     },
     '& button': {
       background: colors.accentBlue,
@@ -79,7 +85,7 @@ function App() {
 
   const handleSubmit = (event: any) => {
     event.preventDefault()
-    if (!event.target.value) return;
+    if (!searchTerm) return;
     setQueried(true)
   }
 
@@ -117,10 +123,17 @@ function App() {
         <StyledMain>
           {/* Search */}
           <StyledSearch mode={mode}>
+            <Search />
             <form onSubmit={handleSubmit}>
               <div>
                 <label htmlFor="searchTerm"></label>
-                <input type="text" value={searchTerm} onChange={event => setSearchTerm(event.target.value)} id="searchTerm" />
+                <input
+                  id="searchTerm"
+                  type="text"
+                  value={searchTerm}
+                  onChange={event => setSearchTerm(event.target.value)}
+                  placeholder="Search GitHub username…"
+                />
               </div>
               <div>
                 <button type="submit">Search</button>

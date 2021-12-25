@@ -2,9 +2,10 @@
 import { jsx, ThemeProvider, Global, css } from '@emotion/react/macro';
 import React from 'react';
 import './App.css';
-import { useLocalStorage } from './hooks/useLocalStorage'
+import { useAsync, useLocalStorage } from './hooks'
 import { Header, ThemeButton } from './components'
 import * as colors from './styles/colors'
+import { client } from './utils/api-client'
 import { theme, initialMode } from './theme'
 
 declare module '@emotion/react' {
@@ -21,11 +22,23 @@ declare module '@emotion/react' {
 function App() {
   const [mode, setMode] = useLocalStorage('prefers-color-scheme', initialMode)
   const [searchTerm, setSearchTerm] = React.useState('')
+  const [queried, setQueried] = React.useState(false)
+  const { run } = useAsync();
+
+  React.useEffect(() => {
+    if (!queried) return;
+
+    run(client(`${searchTerm}`, {
+      headers: {
+        Accept: 'application/vnd.github.v3+json'
+      }
+    }))
+    setQueried(false)
+  }, [searchTerm, queried, run])
 
   const handleSubmit = (event: any) => {
     event.preventDefault()
-    const {value} = event.target.elements.searchTerm
-    console.log({value})
+    setQueried(true)
   }
   return (
     <ThemeProvider theme={theme}>

@@ -1,24 +1,11 @@
 /** @jsx jsx */ /** @jsxRuntime classic */
-import { jsx, ThemeProvider } from '@emotion/react/macro';
+import { jsx, ThemeProvider, Global, css } from '@emotion/react/macro';
 import React from 'react';
 import './App.css';
 import { useLocalStorage } from './hooks/useLocalStorage'
-import { Moon, Sun } from './icons'
-import { Button, Header } from './components'
+import { Header, ThemeButton } from './components'
 import * as colors from './styles/colors'
-
-const theme = {
-  light: {
-    background: colors.bgLight,
-    foreground: colors.textLight700
-  },
-  dark: {
-    background: colors.bgDark,
-    foreground: colors.textDark700
-  }
-}
-
-const initialMode = 'light'
+import { theme, initialMode } from './theme'
 
 declare module '@emotion/react' {
   interface Theme {
@@ -42,12 +29,14 @@ function App() {
   }
   return (
     <ThemeProvider theme={theme}>
-      <div className="App" css={
-        (theme) => ({
-          background: (theme as any)[mode].background,
-          height: '100vh'
-        })
-      }>
+      <Global
+        styles={css`
+          body {
+            background: ${(theme as any)[mode].background}
+          }
+        `}
+      />
+      <div className="App">
         <Header>
           <div css={{
             display: 'flex',
@@ -58,16 +47,8 @@ function App() {
             paddingTop: '31px',
             paddingBottom: '36px'
           }}>
-            <h1 css={{
-              color: mode === 'light' ? colors.textLight700 : colors.textDark700
-            }}>devfinder</h1>
-            <Button mode={mode} onClick={() => setMode(mode === 'light' ? 'dark' : 'light')} text={(mode === 'light' ? 'dark' : 'light').toUpperCase()}>
-              <span css={{
-                padding: '1em'
-              }}>
-                {mode === 'dark' ? <Sun /> : <Moon />}
-              </span>
-            </Button>
+            <h1 css={{ color: mode === 'light' ? colors.textLight700 : colors.textDark700 }}>devfinder</h1>
+            <ThemeButton onClick={() => setMode(mode === 'light' ? 'dark' : 'light')} mode={mode} />
           </div>
         </Header>
         <main>
@@ -130,7 +111,7 @@ function App() {
           </section>
         </main>
       </div>
-    </ThemeProvider >
+    </ThemeProvider>
   );
 }
 

@@ -64,7 +64,7 @@ function App() {
   const [mode, setMode] = useLocalStorage('prefers-color-scheme', initialMode)
   const [searchTerm, setSearchTerm] = React.useState('')
   const [queried, setQueried] = React.useState(false)
-  const { run, data, isIdle, isLoading, isSuccess, isError, error } = useAsync();
+  const { run, data } = useAsync();
 
   React.useEffect(() => {
     if (!queried) return;

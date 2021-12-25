@@ -10,6 +10,7 @@ body {
   font-family: 'Space Mono', monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin-bottom: 48px;
 }
 
 h1, h2, p {

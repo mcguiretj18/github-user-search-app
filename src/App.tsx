@@ -23,7 +23,7 @@ function App() {
   const [mode, setMode] = useLocalStorage('prefers-color-scheme', initialMode)
   const [searchTerm, setSearchTerm] = React.useState('')
   const [queried, setQueried] = React.useState(false)
-  const { run } = useAsync();
+  const { run, data } = useAsync();
 
   React.useEffect(() => {
     if (!queried) return;
@@ -39,6 +39,25 @@ function App() {
   const handleSubmit = (event: any) => {
     event.preventDefault()
     setQueried(true)
+  }
+
+  React.useEffect(() => {
+    run(client('octocat', {
+      headers: {
+        Accept: 'application/vnd.github.v3+json'
+      }
+    }))
+  }, [run])
+  let formattedDate;
+  if (data) {
+    const [month, day, year] =
+      Intl.DateTimeFormat('default', {
+        year: "numeric",
+        day: "numeric",
+        month: "short"
+      }).format(new Date(data?.created_at)).split(/\s/g)
+
+    formattedDate = [day.replace(',', ''), month, year].join(' ')
   }
   return (
     <ThemeProvider theme={theme}>
@@ -79,10 +98,10 @@ function App() {
           <section>
             {/* User Profile */}
             <section>
-              <div>Avatar</div>
-              <h2>Username</h2>
-              <div>@tagline</div>
-              <div>Registration Date</div>
+              <img src={data?.avatar_url ?? ''} alt="Avatar" />
+              <h2>{data?.name}</h2>
+              <div>{data?.company}</div>
+              <div>Joined {formattedDate ?? ''}</div>
             </section>
             {/* Biography */}
             <section>
@@ -92,33 +111,33 @@ function App() {
             <section>
               <div>
                 <div>Repos</div>
-                <div>8</div>
+                <div>{data?.public_repos}</div>
               </div>
               <div>
                 <div>Followers</div>
-                <div>3938</div>
+                <div>{data?.followers}</div>
               </div>
               <div>
                 <div>Following</div>
-                <div>9</div>
+                <div>{data?.following}</div>
               </div>
             </section>
             <footer>
               <div>
-                [icon]
-                [text]
+                Location{' '}
+                {data?.location}
               </div>
               <div>
-                [icon]
-                [text]
+                Blog{' '}
+                {data?.blog}
               </div>
               <div>
-                [icon]
-                [text]
+                Twitter Handle{' '}
+                {data?.twitter_username}
               </div>
               <div>
-                [icon]
-                [text]
+                Company{' '}
+                {data?.company}
               </div>
             </footer>
           </section>

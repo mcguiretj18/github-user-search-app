@@ -79,6 +79,7 @@ function App() {
 
   const handleSubmit = (event: any) => {
     event.preventDefault()
+    if (!event.target.value) return;
     setQueried(true)
   }
 

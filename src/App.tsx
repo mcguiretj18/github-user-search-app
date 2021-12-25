@@ -34,8 +34,6 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App" css={(theme) => ({ background: (theme as any)[mode].background, height: '100%' })}>
-        Github search app
-
         <Button mode={mode} onClick={() => setMode(mode === 'light' ? 'dark' : 'light')} text={(mode === 'light' ? 'dark' : 'light').toUpperCase()}>
           <span css={{
             padding: '1em'

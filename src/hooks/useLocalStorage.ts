@@ -28,7 +28,7 @@ function useLocalStorage(
 
     prevKeyRef.current = key;
     window.localStorage.setItem(key, serialize(state));
-  }, [key, state]);
+  }, [key, state, serialize]);
 
   return [state, setState];
 }

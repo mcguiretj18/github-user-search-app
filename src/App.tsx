@@ -1,9 +1,10 @@
 /** @jsx jsx */ /** @jsxRuntime classic */
 import { jsx, ThemeProvider, Global, css } from '@emotion/react/macro';
+import styled from '@emotion/styled/macro';
 import React from 'react';
 import './App.css';
 import { useAsync, useLocalStorage } from './hooks'
-import { Header, ThemeButton } from './components'
+import { Header, SearchResults, ThemeButton } from './components'
 import * as colors from './styles/colors'
 import { client } from './utils/api-client'
 import { theme, initialMode } from './theme'
@@ -19,11 +20,51 @@ declare module '@emotion/react' {
   }
 }
 
+const StyledMain = styled.main({
+  width: '87%',
+  margin: '0 auto'
+})
+
+const StyledSearch = styled.section(
+  {
+    padding: '10px',
+    marginBottom: '1rem',
+    borderRadius: '15px',
+    '& form': {
+      display: 'flex',
+      justifyContent: 'space-between'
+    },
+    '& input': {
+      border: 'none',
+      fontSize: '13px',
+      fontFamily: 'Space Mono, monospace',
+      margin: '18px 0px'
+    },
+    '& button': {
+      background: colors.accentBlue,
+      border: 'none',
+      fontSize: '1rem',
+      fontWeight: 700,
+      fontFamily: 'Space Mono, monospace',
+      color: colors.textDark400,
+      padding: '12.5px 18px',
+      borderRadius: '10px'
+    }
+  },
+  ({ mode = '' }: { mode: string }) => ({
+    background: mode === 'light' ? '#FFFFFF' : '#1E2A47',
+    '& input': {
+      color: mode === 'light' ? '#222731' : '#FFFFFF',
+      background: mode === 'light' ? '#FFFFFF !important' : '#1E2A47 !important', 
+    },
+  })
+)
+
 function App() {
   const [mode, setMode] = useLocalStorage('prefers-color-scheme', initialMode)
   const [searchTerm, setSearchTerm] = React.useState('')
   const [queried, setQueried] = React.useState(false)
-  const { run, data } = useAsync();
+  const { run, data, isIdle, isLoading, isSuccess, isError, error } = useAsync();
 
   React.useEffect(() => {
     if (!queried) return;
@@ -48,17 +89,6 @@ function App() {
       }
     }))
   }, [run])
-  let formattedDate;
-  if (data) {
-    const [month, day, year] =
-      Intl.DateTimeFormat('default', {
-        year: "numeric",
-        day: "numeric",
-        month: "short"
-      }).format(new Date(data?.created_at)).split(/\s/g)
-
-    formattedDate = [day.replace(',', ''), month, year].join(' ')
-  }
   return (
     <ThemeProvider theme={theme}>
       <Global
@@ -83,65 +113,21 @@ function App() {
             <ThemeButton onClick={() => setMode(mode === 'light' ? 'dark' : 'light')} mode={mode} />
           </div>
         </Header>
-        <main>
+        <StyledMain>
           {/* Search */}
-          <section>
+          <StyledSearch mode={mode}>
             <form onSubmit={handleSubmit}>
               <div>
                 <label htmlFor="searchTerm"></label>
                 <input type="text" value={searchTerm} onChange={event => setSearchTerm(event.target.value)} id="searchTerm" />
+              </div>
+              <div>
                 <button type="submit">Search</button>
               </div>
             </form>
-          </section>
-          {/* SearchResults */}
-          <section>
-            {/* User Profile */}
-            <section>
-              <img src={data?.avatar_url ?? ''} alt="Avatar" />
-              <h2>{data?.name}</h2>
-              <div>{data?.company}</div>
-              <div>Joined {formattedDate ?? ''}</div>
-            </section>
-            {/* Biography */}
-            <section>
-              {data?.bio ?? 'This profile has no bio'}
-            </section>
-            {/* Contribution */}
-            <section>
-              <div>
-                <div>Repos</div>
-                <div>{data?.public_repos}</div>
-              </div>
-              <div>
-                <div>Followers</div>
-                <div>{data?.followers}</div>
-              </div>
-              <div>
-                <div>Following</div>
-                <div>{data?.following}</div>
-              </div>
-            </section>
-            <footer>
-              <div>
-                Location{' '}
-                {data?.location ?? 'Not Available'}
-              </div>
-              <div>
-                Blog{' '}
-                {data?.blog ?? 'Not Available'}
-              </div>
-              <div>
-                Twitter{' '}
-                {data?.twitter_username ?? 'Not Available'}
-              </div>
-              <div>
-                Company{' '}
-                {data?.company ?? 'Not Available'}
-              </div>
-            </footer>
-          </section>
-        </main>
+          </StyledSearch>
+          <SearchResults data={data} mode={mode} />
+        </StyledMain>
       </div>
     </ThemeProvider>
   );

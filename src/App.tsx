@@ -1,5 +1,5 @@
 /** @jsx jsx */ /** @jsxRuntime classic */
-import { jsx, ThemeProvider } from '@emotion/react';
+import { jsx, ThemeProvider } from '@emotion/react/macro';
 import React from 'react';
 import './App.css';
 import { useLocalStorage } from './hooks/useLocalStorage'
@@ -42,7 +42,12 @@ function App() {
   }
   return (
     <ThemeProvider theme={theme}>
-      <div className="App" css={(theme) => ({ background: (theme as any)[mode].background, height: '100%' })}>
+      <div className="App" css={
+        (theme) => ({
+          background: (theme as any)[mode].background,
+          height: '100vh'
+        })
+      }>
         <Header>
           <div css={{
             display: 'flex',

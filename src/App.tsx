@@ -105,7 +105,7 @@ function App() {
             </section>
             {/* Biography */}
             <section>
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros.
+              {data?.bio ?? 'This profile has no bio'}
             </section>
             {/* Contribution */}
             <section>
@@ -125,19 +125,19 @@ function App() {
             <footer>
               <div>
                 Location{' '}
-                {data?.location}
+                {data?.location ?? 'Not Available'}
               </div>
               <div>
                 Blog{' '}
-                {data?.blog}
+                {data?.blog ?? 'Not Available'}
               </div>
               <div>
-                Twitter Handle{' '}
-                {data?.twitter_username}
+                Twitter{' '}
+                {data?.twitter_username ?? 'Not Available'}
               </div>
               <div>
                 Company{' '}
-                {data?.company}
+                {data?.company ?? 'Not Available'}
               </div>
             </footer>
           </section>

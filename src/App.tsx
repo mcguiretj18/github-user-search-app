@@ -8,7 +8,7 @@ import { Header, SearchResults, ThemeButton } from './components'
 import * as colors from './styles/colors'
 import { client } from './utils/api-client'
 import { theme, initialMode } from './theme'
-import { Search } from './icons';
+import { Search as SearchIcon } from './icons';
 
 declare module '@emotion/react' {
   interface Theme {
@@ -26,9 +26,14 @@ const StyledMain = styled.main({
   margin: '0 auto'
 })
 
+const StyledSearchIcon = styled.div({
+  marginLeft: '1rem',
+  marginTop: '6px'
+})
+
 const StyledSearch = styled.section(
   {
-    padding: '10px',
+    padding: '7px',
     marginBottom: '1rem',
     borderRadius: '15px',
     display: 'flex',
@@ -43,19 +48,8 @@ const StyledSearch = styled.section(
       fontSize: '13px',
       fontFamily: 'Space Mono, monospace',
       padding: '12px 0px',
-      margin: '6px 0px',
       paddingRight: '8px'
     },
-    '& button': {
-      background: colors.accentBlue,
-      border: 'none',
-      fontSize: '1rem',
-      fontWeight: 700,
-      fontFamily: 'Space Mono, monospace',
-      color: colors.textDark400,
-      padding: '12.5px 18px',
-      borderRadius: '10px'
-    }
   },
   ({ mode = '' }: { mode: string }) => ({
     background: mode === 'light' ? '#FFFFFF' : '#1E2A47',
@@ -66,11 +60,24 @@ const StyledSearch = styled.section(
   })
 )
 
+const StyledSearchButton = styled.button({
+  background: colors.accentBlue,
+  border: 'none',
+  fontSize: '14px',
+  fontWeight: 700,
+  fontFamily: 'Space Mono, monospace',
+  color: colors.textDark400,
+  padding: '12.5px 18px',
+  borderRadius: '10px'
+})
+
 function App() {
   const [mode, setMode] = useLocalStorage('prefers-color-scheme', initialMode)
   const [searchTerm, setSearchTerm] = React.useState('')
   const [queried, setQueried] = React.useState(false)
   const { run, data } = useAsync();
+
+  console.log({ data })
 
   React.useEffect(() => {
     if (!queried) return;
@@ -123,7 +130,9 @@ function App() {
         <StyledMain>
           {/* Search */}
           <StyledSearch mode={mode}>
-            <Search />
+            <StyledSearchIcon>
+              <SearchIcon />
+            </StyledSearchIcon>
             <form onSubmit={handleSubmit}>
               <div>
                 <label htmlFor="searchTerm"></label>
@@ -136,7 +145,7 @@ function App() {
                 />
               </div>
               <div>
-                <button type="submit">Search</button>
+                <StyledSearchButton type="submit">Search</StyledSearchButton>
               </div>
             </form>
           </StyledSearch>

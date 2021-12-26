@@ -28,7 +28,8 @@ const StyledMain = styled.main({
 
 const StyledSearchIcon = styled.div({
   marginLeft: '1rem',
-  marginTop: '6px'
+  marginTop: '6px',
+  scale: 0.75
 })
 
 const StyledSearch = styled.section(

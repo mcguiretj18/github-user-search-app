@@ -1,6 +1,6 @@
 import React from 'react'
 /** @jsx jsx */ /** @jsxRuntime classic */
-import { jsx, css } from '@emotion/react/macro';
+import { jsx } from '@emotion/react/macro';
 import { Button } from '../Button'
 import { Moon, Sun } from '../../icons'
 

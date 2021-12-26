@@ -21,11 +21,18 @@ const StyledUserProfile = styled.section({
     }
 })
 
-const StyledBio = styled.section({
-    padding: '33px 0px 23px 0px',
-    fontSize: '13px',
-    textAlign: 'left'
+const StyledCompany = styled.div({
+    color: '#0079FF'
 })
+
+const StyledBio = styled.section(
+    {
+        padding: '33px 0px 23px 0px',
+        fontSize: '13px',
+        textAlign: 'left'
+    },
+    ({ noBio }: { noBio: boolean }) => ({ opacity: noBio ? 0.75 : 1 })
+)
 
 const StyledContribution = styled.section({
     display: 'flex',
@@ -37,6 +44,9 @@ const StyledContribution = styled.section({
         fontSize: '11px',
         marginBottom: '8px'
     },
+    '& .contribution-content': {
+        fontWeight: 700
+    }
 }, ({ mode }: { mode: string }) => {
     return {
         background: mode === 'light' ? '#F6F8FF' : '#141D2F'
@@ -65,8 +75,12 @@ const StyledFooter = styled.footer({
     }
 })
 
+const StyledFooterIconBox = styled.div(
+    ({ notAvailable }: { notAvailable: boolean }) => ({ opacity: notAvailable ? '0.5' : '1' })
+)
+
 const SearchResults = ({ data, mode = '' }: { data: any, mode: string }) => {
-    console.log({data})
+    console.log({ data })
     let formattedDate;
     if (data?.created_at) {
         const [month, day, year] =
@@ -88,46 +102,46 @@ const SearchResults = ({ data, mode = '' }: { data: any, mode: string }) => {
                 }
                 <div>
                     <h2>{data?.name}</h2>
-                    <div>{data?.company}</div>
+                    <StyledCompany>{data?.company}</StyledCompany>
                     <div>Joined {formattedDate ?? ''}</div>
                 </div>
             </StyledUserProfile>
             {/* Biography */}
-            <StyledBio>
+            <StyledBio noBio={!data?.bio}>
                 {data?.bio ?? 'This profile has no bio'}
             </StyledBio>
             {/* Contribution */}
             <StyledContribution mode={mode}>
                 <div>
                     <div className="contribution-title">Repos</div>
-                    <div>{data?.public_repos}</div>
+                    <div className="contribution-content">{data?.public_repos}</div>
                 </div>
                 <div>
                     <div className="contribution-title">Followers</div>
-                    <div>{data?.followers}</div>
+                    <div className="contribution-content">{data?.followers}</div>
                 </div>
                 <div>
                     <div className="contribution-title">Following</div>
-                    <div>{data?.following}</div>
+                    <div className="contribution-content">{data?.following}</div>
                 </div>
             </StyledContribution>
             <StyledFooter>
-                <div>
+                <StyledFooterIconBox notAvailable={!data?.location}>
                     <Location mode={mode} />
                     <span>{data?.location || 'Not Available'}</span>
-                </div>
-                <div>
+                </StyledFooterIconBox>
+                <StyledFooterIconBox notAvailable={!data?.blog}>
                     <Website mode={mode} />
                     <span>{data?.blog || 'Not Available'}</span>
-                </div>
-                <div>
+                </StyledFooterIconBox>
+                <StyledFooterIconBox notAvailable={!data?.twitter_username}>
                     <Twitter mode={mode} />
                     <span>{data?.twitter_username || 'Not Available'}</span>
-                </div>
-                <div>
+                </StyledFooterIconBox>
+                <StyledFooterIconBox notAvailable={!data?.company}>
                     <Company mode={mode} />
                     <span>{data?.company || 'Not Available'}</span>
-                </div>
+                </StyledFooterIconBox>
             </StyledFooter>
         </StyledSearchResults>
     )

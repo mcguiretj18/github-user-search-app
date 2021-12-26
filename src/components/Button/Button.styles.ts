@@ -9,6 +9,9 @@ export const StyledButton = styled.button(
     alignItems: "center",
     justifyContent: "center",
     cursor: "pointer",
+    fontFamily: 'Space Mono, monospace',
+    fontWeight: 700,
+    letterSpacing: '2.5px',
   },
   ({ mode, hovered }: { mode: string; hovered: boolean }) => {
     if (hovered) {

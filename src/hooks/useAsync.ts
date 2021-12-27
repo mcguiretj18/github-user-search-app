@@ -52,7 +52,6 @@ function useAsync(initialState = {}) {
       safeSetState({ status: "loading" });
       return promise.then(
         (data: any) => {
-          console.log({ data });
           setData(data);
           return data;
         },

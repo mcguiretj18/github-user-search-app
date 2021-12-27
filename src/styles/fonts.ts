@@ -1,0 +1,1 @@
+export const primary = 'Space Mono, monospace';

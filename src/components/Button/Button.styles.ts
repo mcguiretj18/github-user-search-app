@@ -1,5 +1,6 @@
 import styled from "@emotion/styled/macro";
 import * as colors from '../../styles/colors'
+import * as fonts from '../../styles/fonts'
 
 export const StyledButton = styled.button(
   {
@@ -9,7 +10,7 @@ export const StyledButton = styled.button(
     alignItems: "center",
     justifyContent: "center",
     cursor: "pointer",
-    fontFamily: 'Space Mono, monospace',
+    fontFamily: fonts.primary,
     fontWeight: 700,
     letterSpacing: '2.5px',
   },
